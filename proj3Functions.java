@@ -221,4 +221,16 @@ public class proj3Functions{
 			System.out.println(job);
 		}
 	}
+
+	public void searchJobId(Integer id){
+		ConnectionString connString = new ConnectionString("mongodb+srv://cs432:cs432@cluster0-bwsn2.mongodb.net/test?retryWrites=true&w=majority");
+		MongoClientSettings settings = MongoClientSettings.builder().applyConnectionString(connString).retryWrites(true).build();
+		MongoClient mongo = MongoClients.create(settings);
+		MongoDatabase database = mongo.getDatabase("test");
+		MongoCollection<Document> jobs = database.getCollection("Jobs");
+
+		Document job = jobs.find({"Job ID": id});
+
+		System.out.println(job);
+	}
 }
