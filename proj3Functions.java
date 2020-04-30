@@ -56,14 +56,14 @@ public class proj3Functions{
 	}
 	
 	class CountComparator implements Comparator<String> {
-		Map<String, Integer> base;
+		Map<String, Integer> initMap;
 		
-		public CountComparator(Map<String, Integer> base){
-			this.base = base;
+		public CountComparator(Map<String, Integer> initMap){
+			this.initMap = initMap;
 		}
 		
 		public int compare(String a, String b){
-			if(base.get(a) >= base.get(b)){
+			if(initMap.get(a) >= initMap.get(b)){
 				return -1;
 			} else {
 				return 1;
@@ -185,7 +185,7 @@ public class proj3Functions{
 		for(String comp : companies){
 			System.out.println(comp);
 		}
-		System.out.println(count);
+		//System.out.println(count);
 	}
 	
 	public void searchCompany(String str){
@@ -205,6 +205,20 @@ public class proj3Functions{
 		
 		for(Document company : companyList){
 			System.out.println(company);
+		}
+	}
+
+	public void searchHoursType(String str){
+		ConnectionString connString = new ConnectionString("mongodb+srv://cs432:cs432@cluster0-bwsn2.mongodb.net/test?retryWrites=true&w=majority");
+		MongoClientSettings settings = MongoClientSettings.builder().applyConnectionString(connString).retryWrites(true).build();
+		MongoClient mongo = MongoClients.create(settings);
+		MongoDatabase database = mongo.getDatabase("test");
+		MongoCollection<Document> jobs = database.getCollection("Jobs");
+
+		List<Document> jobListHours = jobs.find({"Full-Time/Part-Time indicator" : str}).into(new ArrayList<>());
+
+		for(Document job : jobListHours){
+			System.out.println(job);
 		}
 	}
 }
