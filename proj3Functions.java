@@ -100,7 +100,7 @@ public class proj3Functions{
 			for(Document job : jobList){
 				title = job.getString("Business Title");
 				jobId = job.getInteger("Job ID");
-				if(jobId != oldId){
+				if(!oldId.equals(jobId)){
 					oldId = jobId;
 					System.out.println(jobId + "\t" + title);
 				}
@@ -149,7 +149,7 @@ public class proj3Functions{
 			for(Document job : jobList){
 				category = job.getString("Job Category");
 				jobId = job.getInteger("Job ID");
-				if(jobId != oldId){
+				if(!oldId.equals(jobId)){
 					oldId = jobId;
 					System.out.println(jobId + "\t" + category);
 				}
@@ -198,7 +198,7 @@ public class proj3Functions{
 				comp = company.getString("Agency");
 				jobId = company.getInteger("Job ID");
 				title = company.getString("Business Title");
-				if(oldId != jobId){
+				if(!oldId.equals(jobId)){
 					oldId = jobId;
 					System.out.println(jobId + "\t" + comp + "\t" + title);
 				}
@@ -222,7 +222,7 @@ public class proj3Functions{
 		for(Document job : jobListHours){
 			title = job.getString("Business Title");
 			jobId = job.getInteger("Job ID");
-			if(oldId != jobId){
+			if(!oldId.equals(jobId)){
 				oldId = jobId;
 				System.out.println(jobId + " : " + title);
 			}
@@ -293,9 +293,48 @@ public class proj3Functions{
 		for(Document job : jobList){
 			title = job.getString("Business Title");
 			jobId = job.getInteger("Job ID");
-			if(oldId != jobId){
+			if(!oldId.equals(jobId)){
 				System.out.println(jobId + "\t" + title);
 			}
 		}
+	}
+
+	public searchSalary(MongoCollection<Document> jobs, Integer min){
+		Document rangeQuery = new Document();
+		rangeQuery.append("$gt", min);
+		Document findQuery = new Document();
+		findQuery.append("Salary Range From", rangeQuery);
+
+		List<Document> salaryList = jobs.find(findQuery).into(new ArrayList<>());
+
+		Integer jobId = 0;
+		Integer oldId = -1;
+		String title = "";
+		for(Document job : salaryList){
+			Object r1 = job.get("Salary Range From");
+			Object r2 = job.get("Salary Range To");
+			Double range1;
+			Double range2;
+				
+				//System.out.println(r1.getClass().toString());
+				
+			if (r1.getClass().toString().contains("Integer")) {
+				range1 = new Double((Integer)r1);
+			} else {
+				range1 = (Double)r1;
+			}
+			
+			if (r2.getClass().toString().contains("Integer")) {
+				range2 = new Double((Integer)r2);
+			} else {
+				range2 = (Double)r2;
+			}
+
+			if(!oldId.equals(jobId)){
+				oldId = jobId;
+				System.out.println(jobId + "\t" + title + "\tMinimum Salary: " + range1 + "\tMaximum Salary: " + range2);
+			}
+		}
+		
 	}
 }

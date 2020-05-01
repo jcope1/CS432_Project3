@@ -83,7 +83,6 @@ class Driver{
 							System.out.println("3) Company");
 							System.out.println("4) Job Category");
 							System.out.println("5) Salary");
-							System.out.println("6) Experience Level");
 							System.out.println("7) Full-Time/Part-Time");
 							System.out.println("");
 							System.out.println("0) Back");
