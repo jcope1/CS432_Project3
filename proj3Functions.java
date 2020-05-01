@@ -311,6 +311,8 @@ public class proj3Functions{
 		Integer oldId = -1;
 		String title = "";
 		for(Document job : salaryList){
+			jobId = job.getInteger("Job ID");
+			title = job.getString("Business Title");
 			Object r1 = job.get("Salary Range From");
 			Object r2 = job.get("Salary Range To");
 			Double range1;
