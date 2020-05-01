@@ -3,6 +3,7 @@ package com.mongodb.quickstart;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Hashtable;
@@ -21,18 +22,18 @@ import com.mongodb.client.MongoDatabase;
 
 public class copeFunctions {
 	
-	public void printExperienceAverages() {
-		ConnectionString connString = new ConnectionString("mongodb+srv://cs432:cs432@cluster0-bwsn2.mongodb.net/test?retryWrites=true&w=majority");
-		MongoClientSettings settings = MongoClientSettings.builder().applyConnectionString(connString).retryWrites(true).build();
-		MongoClient mongo = MongoClients.create(settings);
-		MongoDatabase database = mongo.getDatabase("test");
-		MongoCollection<Document> jobs = database.getCollection("Jobs");
-		
+	public void printExperienceAverages(MongoCollection<Document> jobs) {
+
 		List<Document> jobList = jobs.find().into(new ArrayList<Document>());
 		
 		ArrayList<String> exp = new ArrayList<String>();
 		
+		Integer lastJobID = -1;
+		
 		for (Document doc : jobList) {
+			Integer jobID = doc.getInteger("Job ID");
+			if (jobID.equals(lastJobID)) continue;
+			lastJobID = jobID;
             exp.add(doc.getString("Minimum Qual Requirements"));
         }
 		
@@ -56,13 +57,8 @@ public class copeFunctions {
 		System.out.println("Minimum masters degree: " + ((masters) / (float)exp.size()) * 100 + "% (" + masters + ")");
 	}
 	
-	public void printHighestSalaryRange() {
-		ConnectionString connString = new ConnectionString("mongodb+srv://cs432:cs432@cluster0-bwsn2.mongodb.net/test?retryWrites=true&w=majority");
-		MongoClientSettings settings = MongoClientSettings.builder().applyConnectionString(connString).retryWrites(true).build();
-		MongoClient mongo = MongoClients.create(settings);
-		MongoDatabase database = mongo.getDatabase("test");
-		MongoCollection<Document> jobs = database.getCollection("Jobs");
-		
+	public void printHighestSalaryRange(MongoCollection<Document> jobs) {
+
 		List<Document> jobList = jobs.find().into(new ArrayList<Document>());
 		
 		Double maxRange = 0.0;
@@ -70,7 +66,13 @@ public class copeFunctions {
 		
 		String maxTitle = "";
 		
+		Integer lastJobID = -1;
+		
 		for (Document doc : jobList) {
+			Integer jobID = doc.getInteger("Job ID");
+			if (jobID.equals(lastJobID)) continue;
+			lastJobID = jobID;
+			
 			Double[] range = new Double[2];
 			
 			Object r1 = doc.get("Salary Range From");
@@ -102,18 +104,19 @@ public class copeFunctions {
 		System.out.println(maxTitle + ": $" + maxRange + " range [$" + maxEnds[0] + ", $" + maxEnds[1] + "]");
 	}
 	
-	public void printLocationHeatmap() {
-		ConnectionString connString = new ConnectionString("mongodb+srv://cs432:cs432@cluster0-bwsn2.mongodb.net/test?retryWrites=true&w=majority");
-		MongoClientSettings settings = MongoClientSettings.builder().applyConnectionString(connString).retryWrites(true).build();
-		MongoClient mongo = MongoClients.create(settings);
-		MongoDatabase database = mongo.getDatabase("test");
-		MongoCollection<Document> jobs = database.getCollection("Jobs");
-		
+	public void printLocationHeatmap(MongoCollection<Document> jobs) {
+
 		List<Document> jobList = jobs.find().into(new ArrayList<Document>());
 		
 		Hashtable<String, Integer> locations = new Hashtable<String, Integer>();
 		
+		Integer lastJobID = -1;
+		
 		for (Document doc : jobList) {
+			Integer jobID = doc.getInteger("Job ID");
+			if (jobID.equals(lastJobID)) continue;
+			lastJobID = jobID;
+			
 			String s = doc.getString("Work Location").toLowerCase();
 			
 			Scanner delim = new Scanner(s);
@@ -147,12 +150,7 @@ public class copeFunctions {
 		}
 	}
 	
-	public void printJobTrends() {
-		ConnectionString connString = new ConnectionString("mongodb+srv://cs432:cs432@cluster0-bwsn2.mongodb.net/test?retryWrites=true&w=majority");
-		MongoClientSettings settings = MongoClientSettings.builder().applyConnectionString(connString).retryWrites(true).build();
-		MongoClient mongo = MongoClients.create(settings);
-		MongoDatabase database = mongo.getDatabase("test");
-		MongoCollection<Document> jobs = database.getCollection("Jobs");
+	public void printJobTrends(MongoCollection<Document> jobs) {
 		
 		List<Document> jobList = jobs.find().into(new ArrayList<Document>());
 		
@@ -161,7 +159,13 @@ public class copeFunctions {
 		
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		
+		Integer lastJobID = -1;
+		
 		for (Document doc : jobList) {
+			Integer jobID = doc.getInteger("Job ID");
+			if (jobID.equals(lastJobID)) continue;
+			lastJobID = jobID;
+			
 			String n = doc.getString("Business Title");
 			Date d;
 			try {
@@ -174,7 +178,9 @@ public class copeFunctions {
 			}
         }
 		
-		System.out.println("Oldest job postings:");
+		SimpleDateFormat dtf = new SimpleDateFormat("dd/MM/yyyy");
+		
+		System.out.println("Oldest job postings (least popular):");
 		for (int i = 0; i < 10; i++) {
 			int oldestIndex = dates.size() - 1;
 			Date oldest = dates.get(dates.size() - 1);
@@ -190,10 +196,10 @@ public class copeFunctions {
 			
 			dates.remove(oldestIndex);
 			names.remove(oldestIndex);
-			System.out.println(oldestName + ": " + oldest.toString());
+			System.out.println(oldestName + ": " + dtf.format(oldest));
 		}
 		
-		System.out.println("\nNewest job postings:");
+		System.out.println("\nNewest job postings (most popular):");
 		for (int i = 0; i < 10; i++) {
 			int newestIndex = dates.size() - 1;
 			Date newest = dates.get(dates.size() - 1);
@@ -209,7 +215,7 @@ public class copeFunctions {
 			
 			dates.remove(newestIndex);
 			names.remove(newestIndex);
-			System.out.println(newestName + ": " + newest.toString());
+			System.out.println(newestName + ": " + dtf.format(newest));
 		}
 	}
 }
