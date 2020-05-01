@@ -176,7 +176,7 @@ public class proj3Functions{
 		for(String comp : companies){
 			System.out.println(comp);
 		}
-		System.out.println(count);
+		//System.out.println(count);
 	}
 	
 	public void searchCompany(MongoCollection<Document> jobs, String str){		
