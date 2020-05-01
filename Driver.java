@@ -134,10 +134,10 @@ class Driver{
 									System.out.println("\n>>>");
 									String value = in.nextLine();
 									try{
-										Integer minumum = Integer.parseInt(value);
-										func.searchSalary(jobs, minimum)
+										Integer minimum = Integer.parseInt(value);
+										func.searchSalary(jobs, minimum);
 									}
-									catch(Exeception e){
+									catch(Exception e){
 										System.out.println("Please enter valid value.");
 									}
 								}
