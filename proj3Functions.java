@@ -1,3 +1,5 @@
+package com.mongodb.quickstart;
+
 import com.mongodb.ConnectionString;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoClient;
@@ -16,6 +18,10 @@ import java.util.TreeMap;
 import java.util.regex.Pattern;
 
 public class proj3Functions{
+
+	public proj3Functions(){
+		java.util.logging.Logger.getLogger("org.mongodb.driver").setLevel(java.util.logging.Level.SEVERE);
+	}
 	
 	
 	public void listCommonJobTitles(){
@@ -44,8 +50,6 @@ public class proj3Functions{
 		
 		sorted_jobTitleCount.putAll(jobTitleCount);
 		
-		//String first = sorted_jobTitleCount.firstKey();
-		
 		Map.Entry<String, Integer> title = sorted_jobTitleCount.pollFirstEntry();
 		System.out.println(title);
 		
@@ -56,14 +60,14 @@ public class proj3Functions{
 	}
 	
 	class CountComparator implements Comparator<String> {
-		Map<String, Integer> initMap;
+		Map<String, Integer> base;
 		
-		public CountComparator(Map<String, Integer> initMap){
-			this.initMap = initMap;
+		public CountComparator(Map<String, Integer> base){
+			this.base = base;
 		}
 		
 		public int compare(String a, String b){
-			if(initMap.get(a) >= initMap.get(b)){
+			if(base.get(a) >= base.get(b)){
 				return -1;
 			} else {
 				return 1;
@@ -111,10 +115,18 @@ public class proj3Functions{
 		
 		List<Document> jobList = jobs.find(findQuery).into(new ArrayList<>());
 		
-		for(Document job : jobList){
-			System.out.println(job);
+		String title = "";
+		Integer jobId = 0;
+		if(!jobList.isEmpty()){
+			for(Document job : jobList){
+				title = job.getString("Business Title");
+				jobId = job.getInteger("Job ID");
+				System.out.println(jobId + "\t" + title);
+			}
 		}
-
+		else{
+			System.out.println("Search returned Empty\n");
+		}
 	}
 	
 	public void listJobCategories(){
@@ -158,8 +170,18 @@ public class proj3Functions{
 		
 		List<Document> jobList = jobs.find(findQuery).into(new ArrayList<>());
 		
-		for(Document job : jobList){
-			System.out.println(job);
+		String category = "";
+		Integer jobId = 0;
+		
+		if(!jobList.isEmpty()){
+			for(Document job : jobList){
+				category = job.getString("Job Category");
+				jobId = job.getInteger("Job ID");
+				System.out.println(jobId + "\t" + category);
+			}
+		}
+		else{
+			System.out.println("Search returned Empty\n");
 		}
 	}
 	
@@ -185,7 +207,7 @@ public class proj3Functions{
 		for(String comp : companies){
 			System.out.println(comp);
 		}
-		//System.out.println(count);
+		System.out.println(count);
 	}
 	
 	public void searchCompany(String str){
@@ -203,22 +225,42 @@ public class proj3Functions{
 		
 		List<Document> companyList = jobs.find(findQuery).into(new ArrayList<>());
 		
-		for(Document company : companyList){
-			System.out.println(company);
+		String comp = "";
+		Integer jobId = 0;
+		String title = "";
+		
+		if(!companyList.isEmpty()){
+			for(Document company : companyList){
+				comp = company.getString("Agency");
+				jobId = company.getInteger("Job ID");
+				title = company.getString("Business Title");
+				System.out.println(jobId + "\t" + comp + "\t" + title);
+			}
+		}
+		else{
+			System.out.println("Search returned Empty\n");
 		}
 	}
-
+	
 	public void searchHoursType(String str){
 		ConnectionString connString = new ConnectionString("mongodb+srv://cs432:cs432@cluster0-bwsn2.mongodb.net/test?retryWrites=true&w=majority");
 		MongoClientSettings settings = MongoClientSettings.builder().applyConnectionString(connString).retryWrites(true).build();
 		MongoClient mongo = MongoClients.create(settings);
 		MongoDatabase database = mongo.getDatabase("test");
 		MongoCollection<Document> jobs = database.getCollection("Jobs");
+		
+		Document findQuery = new Document();
+		findQuery.append("Full-Time/Part-Time indicator", str);
 
-		List<Document> jobListHours = jobs.find({"Full-Time/Part-Time indicator" : str}).into(new ArrayList<>());
+		List<Document> jobListHours = jobs.find(findQuery).into(new ArrayList<>());
+
+		Integer jobId = 0;
+		String title = "";
 
 		for(Document job : jobListHours){
-			System.out.println(job);
+			title = job.getString("Business Title");
+			jobId = job.getInteger("Job ID");
+			System.out.println(jobId + " : " + title);
 		}
 	}
 
@@ -228,9 +270,36 @@ public class proj3Functions{
 		MongoClient mongo = MongoClients.create(settings);
 		MongoDatabase database = mongo.getDatabase("test");
 		MongoCollection<Document> jobs = database.getCollection("Jobs");
+		
+		Document findQuery = new Document();
+		findQuery.append("Job ID", id);
 
-		Document job = jobs.find({"Job ID": id});
-
-		System.out.println(job);
+		List<Document> jobList = jobs.find(findQuery).into(new ArrayList<>());
+		if(!jobList.isEmpty()){
+			for(Document job : jobList){
+				System.out.println("Job ID:\t" + job.getInteger("Job ID"));
+				System.out.println("Agency:\t" + job.getString("Agency"));
+				System.out.println("# of Positions:\t" + job.getInteger("# Of Positions"));
+				System.out.println("Business Title:\t" + job.getString("Business Title"));
+				System.out.println("Civil Service Title:\t" + job.getString("Civil Service Title"));
+				System.out.println("Title Code No:\t" + job.getInteger("Title Code No"));
+				System.out.println("Level:\t" + job.getInteger("Level"));
+				System.out.println("Job Category:\t" + job.getString("Job Category"));
+				System.out.println("Full-Time/Part-Time:\t" + job.getString("Full-Time/Part-Time indicator"));
+				System.out.println("Salary Frequency:\t" + job.getString("Salary Frequency"));
+				System.out.println("Salary Range:\t" + job.getDouble("Salary Range From") + "-" + job.getDouble("Salary Range To"));
+				System.out.println("Work Location:\t" + job.getString("Work Location"));
+				System.out.println("Division:\t" + job.getString("Division/Work Unit"));
+				System.out.println("Job Description:\t" + job.getString("Job Description"));
+				System.out.println("Minimum Qualifying Requirements:\t" + job.getString("Minimum Qual Requirements"));
+				System.out.println("Preferred Skill:\t" + job.getString("Preferred Skills"));
+				System.out.println("Additional Information:\t" + job.getString("Additional Information"));
+				System.out.println("Residency Requirement:\t" + job.getString("Residency Requirement"));
+				System.out.println("Posting Date:\t" + job.getString("Posting Date"));
+			}
+		}
+		else{
+			System.out.println("Search returned Empty\n");
+		}
 	}
 }
