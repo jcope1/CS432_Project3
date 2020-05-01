@@ -1,4 +1,6 @@
 
+package com.mongodb.quickstart;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -17,7 +19,7 @@ import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 
-public class MongoMain {
+public class copeFunctions {
 	
 	public void printExperienceAverages() {
 		ConnectionString connString = new ConnectionString("mongodb+srv://cs432:cs432@cluster0-bwsn2.mongodb.net/test?retryWrites=true&w=majority");
@@ -47,11 +49,11 @@ public class MongoMain {
 			else if (s.contains("high-school") || s.contains("high school")) highschool += 1;
 		}
 		
-		System.out.println("No minimum requirements: " + (((float)exp.size() - (highschool + assoc + bacc + masters)) / exp.size()) * 100 + "%");
-		System.out.println("Minimum high-school: " + (highschool / (float)exp.size()) * 100 + "%");
-		System.out.println("Minimum associates degree: " + ((assoc) / (float)exp.size()) * 100 + "%");
-		System.out.println("Minimum bachelors degree: " + ((bacc) / (float)exp.size()) * 100 + "%");
-		System.out.println("Minimum masters degree: " + ((masters) / (float)exp.size()) * 100 + "%");
+		System.out.println("No minimum requirements: " + (((float)exp.size() - (highschool + assoc + bacc + masters)) / exp.size()) * 100 + "% (" + (exp.size() - (highschool + assoc + bacc + masters)) + ")");
+		System.out.println("Minimum high-school: " + (highschool / (float)exp.size()) * 100 + "% (" + highschool + ")");
+		System.out.println("Minimum associates degree: " + ((assoc) / (float)exp.size()) * 100 + "% (" + assoc + ")");
+		System.out.println("Minimum bachelors degree: " + ((bacc) / (float)exp.size()) * 100 + "% (" + bacc + ")");
+		System.out.println("Minimum masters degree: " + ((masters) / (float)exp.size()) * 100 + "% (" + masters + ")");
 	}
 	
 	public void printHighestSalaryRange() {
@@ -125,6 +127,7 @@ public class MongoMain {
 				if (!locations.containsKey(keyword)) locations.put(keyword, 1);
 				else locations.put(keyword, locations.get(keyword) + 1);
 			}
+			delim.close();
         }
 		
 		Set<String> keys = locations.keySet();
@@ -162,6 +165,7 @@ public class MongoMain {
 			String n = doc.getString("Business Title");
 			Date d;
 			try {
+				if (doc.getString("Posting Date").equals("")) continue;
 				d = sdf.parse(doc.getString("Posting Date"));
 				names.add(n);
 				dates.add(d);

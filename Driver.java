@@ -7,6 +7,7 @@ class Driver{
 		Scanner in = new Scanner(System.in);
 		
 		proj3Functions func = new proj3Functions();
+		copeFunctions cope = new copeFunctions();
 	
 		System.out.println("\n\n\nWelcome to Project 3 by Jake Cope and Aaron Thailer\n");
 
@@ -15,12 +16,12 @@ class Driver{
 		System.out.println("2) List Job Titles");
 		System.out.println("3) List Companies");
 		System.out.println("4) List Job Categories");
-		System.out.println("5) List Top Salary");
-		System.out.println("6) ");
-		System.out.println("7) ");
-		System.out.println("8) ");
-		System.out.println("9) ");
-		System.out.println("0) Search");
+		System.out.println("5) List Greatest Salary Range");
+		System.out.println("6) List Average Experience Level");
+		System.out.println("7) List Common Locations");
+		System.out.println("8) List Citizen Interest");
+		System.out.println("9) Search");
+		System.out.println("0) Exit");
 		System.out.print("\n>>> ");
 		
 		while(true){
@@ -45,23 +46,23 @@ class Driver{
 						func.listJobCategories();
 					}
 					else if(option.equals("5")){
-					
+						cope.printHighestSalaryRange();
 					}
 					else if(option.equals("6")){
-						
+						cope.printExperienceAverages();
 					}
 					else if(option.equals("7")){
-					
+						cope.printLocationHeatmap();
 					}
 					else if(option.equals("8")){
-					
+						cope.printJobTrends();
 					}
-					else if(option.equals("9")){
+					else if(option.equals("0")){
 						exit_menu();
 						in.close();
 						return;
 					}
-					else if(option.equals("0")){
+					else if(option.equals("9")){
 						while(true) {
 							System.out.println("\n\nPlease select from the following options how you wish to search:\n");
 							System.out.println("1) Job ID");
@@ -90,6 +91,7 @@ class Driver{
 										func.searchJobId(idNum);
 									}
 									catch(Exception e) {
+										System.out.println(e.getMessage());
 										System.out.println("Please enter a valid ID Number.\n");
 									}
 								}
@@ -145,12 +147,12 @@ class Driver{
 			System.out.println("2) List Job Titles");
 			System.out.println("3) List Companies");
 			System.out.println("4) List Job Categories");
-			System.out.println("5) List Top Salary");
-			System.out.println("6) ");
-			System.out.println("7) ");
-			System.out.println("8) ");
-			System.out.println("9) ");
-			System.out.println("0) Search");
+			System.out.println("5) List Greatest Salary Range");
+			System.out.println("6) List Average Experience Level");
+			System.out.println("7) List Common Locations");
+			System.out.println("8) List Citizen Interest");
+			System.out.println("9) Search");
+			System.out.println("0) Exit");
 			System.out.print("\n>>> ");
 		}
 	}

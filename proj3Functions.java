@@ -35,7 +35,7 @@ public class proj3Functions{
 		CountComparator compar = new CountComparator(jobTitleCount);
 		TreeMap<String, Integer> sorted_jobTitleCount = new TreeMap<String,Integer>(compar);
 		
-		List<Document> jobList = jobs.find().into(new ArrayList<>());
+		List<Document> jobList = jobs.find().into(new ArrayList<Document>());
 		
 		for(Document job : jobList){
 			String title = job.getString("Business Title");
@@ -76,14 +76,14 @@ public class proj3Functions{
 	}
 	
 	public void listTitles(){
-		List<String> titles = new ArrayList<>();
+		List<String> titles = new ArrayList<String>();
 		Integer count = 0;
 		ConnectionString connString = new ConnectionString("mongodb+srv://cs432:cs432@cluster0-bwsn2.mongodb.net/test?retryWrites=true&w=majority");
 		MongoClientSettings settings = MongoClientSettings.builder().applyConnectionString(connString).retryWrites(true).build();
 		MongoClient mongo = MongoClients.create(settings);
 		MongoDatabase database = mongo.getDatabase("test");
 		MongoCollection<Document> jobs = database.getCollection("Jobs");
-		List<Document> jobList = jobs.find().into(new ArrayList<>());
+		List<Document> jobList = jobs.find().into(new ArrayList<Document>());
 		
 		for(Document job : jobList){
 			String title = job.getString("Business Title");
@@ -113,7 +113,7 @@ public class proj3Functions{
 		Document findQuery = new Document();
 		findQuery.append("Business Title", regQuery);
 		
-		List<Document> jobList = jobs.find(findQuery).into(new ArrayList<>());
+		List<Document> jobList = jobs.find(findQuery).into(new ArrayList<Document>());
 		
 		String title = "";
 		Integer jobId = 0;
@@ -135,9 +135,9 @@ public class proj3Functions{
 		MongoClient mongo = MongoClients.create(settings);
 		MongoDatabase database = mongo.getDatabase("test");
 		MongoCollection<Document> jobs = database.getCollection("Jobs");
-		List<Document> jobList = jobs.find().into(new ArrayList<>());
+		List<Document> jobList = jobs.find().into(new ArrayList<Document>());
 		
-		List<String> categories = new ArrayList<>();
+		List<String> categories = new ArrayList<String>();
 		Integer count = 0;
 		
 		for(Document job : jobList){
@@ -168,7 +168,7 @@ public class proj3Functions{
 		Document findQuery = new Document();
 		findQuery.append("Job Category", regQuery);
 		
-		List<Document> jobList = jobs.find(findQuery).into(new ArrayList<>());
+		List<Document> jobList = jobs.find(findQuery).into(new ArrayList<Document>());
 		
 		String category = "";
 		Integer jobId = 0;
@@ -192,8 +192,8 @@ public class proj3Functions{
 		MongoDatabase database = mongo.getDatabase("test");
 		MongoCollection<Document> jobs = database.getCollection("Jobs");
 		
-		List<Document> companyList = jobs.find().into(new ArrayList<>());
-		List<String> companies = new ArrayList<>();
+		List<Document> companyList = jobs.find().into(new ArrayList<Document>());
+		List<String> companies = new ArrayList<String>();
 		Integer count = 0;
 		
 		for(Document company : companyList){
@@ -223,7 +223,7 @@ public class proj3Functions{
 		Document findQuery = new Document();
 		findQuery.append("Agency", regQuery);
 		
-		List<Document> companyList = jobs.find(findQuery).into(new ArrayList<>());
+		List<Document> companyList = jobs.find(findQuery).into(new ArrayList<Document>());
 		
 		String comp = "";
 		Integer jobId = 0;
@@ -252,7 +252,7 @@ public class proj3Functions{
 		Document findQuery = new Document();
 		findQuery.append("Full-Time/Part-Time indicator", str);
 
-		List<Document> jobListHours = jobs.find(findQuery).into(new ArrayList<>());
+		List<Document> jobListHours = jobs.find(findQuery).into(new ArrayList<Document>());
 
 		Integer jobId = 0;
 		String title = "";
@@ -274,7 +274,7 @@ public class proj3Functions{
 		Document findQuery = new Document();
 		findQuery.append("Job ID", id);
 
-		List<Document> jobList = jobs.find(findQuery).into(new ArrayList<>());
+		List<Document> jobList = jobs.find(findQuery).into(new ArrayList<Document>());
 		if(!jobList.isEmpty()){
 			for(Document job : jobList){
 				System.out.println("Job ID:\t" + job.getInteger("Job ID"));
@@ -287,7 +287,27 @@ public class proj3Functions{
 				System.out.println("Job Category:\t" + job.getString("Job Category"));
 				System.out.println("Full-Time/Part-Time:\t" + job.getString("Full-Time/Part-Time indicator"));
 				System.out.println("Salary Frequency:\t" + job.getString("Salary Frequency"));
-				System.out.println("Salary Range:\t" + job.getDouble("Salary Range From") + "-" + job.getDouble("Salary Range To"));
+				
+				Object r1 = job.get("Salary Range From");
+				Object r2 = job.get("Salary Range To");
+				Double range1;
+				Double range2;
+				
+				//System.out.println(r1.getClass().toString());
+				
+				if (r1.getClass().toString().contains("Integer")) {
+					range1 = new Double((Integer)r1);
+				} else {
+					range1 = (Double)r1;
+				}
+				
+				if (r2.getClass().toString().contains("Integer")) {
+					range2 = new Double((Integer)r2);
+				} else {
+					range2 = (Double)r2;
+				}
+				
+				System.out.println("Salary Range:\t" + range1 + "-" + range2);
 				System.out.println("Work Location:\t" + job.getString("Work Location"));
 				System.out.println("Division:\t" + job.getString("Division/Work Unit"));
 				System.out.println("Job Description:\t" + job.getString("Job Description"));
