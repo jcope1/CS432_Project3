@@ -117,11 +117,15 @@ public class proj3Functions{
 		
 		String title = "";
 		Integer jobId = 0;
+		Integer oldId = -1;
 		if(!jobList.isEmpty()){
 			for(Document job : jobList){
 				title = job.getString("Business Title");
 				jobId = job.getInteger("Job ID");
-				System.out.println(jobId + "\t" + title);
+				if(jobId != oldId){
+					oldId = jobId;
+					System.out.println(jobId + "\t" + title);
+				}
 			}
 		}
 		else{
@@ -172,12 +176,16 @@ public class proj3Functions{
 		
 		String category = "";
 		Integer jobId = 0;
+		Integer oldId = -1;
 		
 		if(!jobList.isEmpty()){
 			for(Document job : jobList){
 				category = job.getString("Job Category");
 				jobId = job.getInteger("Job ID");
-				System.out.println(jobId + "\t" + category);
+				if(jobId != oldId){
+					oldId = jobId;
+					System.out.println(jobId + "\t" + category);
+				}
 			}
 		}
 		else{
@@ -228,13 +236,17 @@ public class proj3Functions{
 		String comp = "";
 		Integer jobId = 0;
 		String title = "";
+		Integer oldId = -1;
 		
 		if(!companyList.isEmpty()){
 			for(Document company : companyList){
 				comp = company.getString("Agency");
 				jobId = company.getInteger("Job ID");
 				title = company.getString("Business Title");
-				System.out.println(jobId + "\t" + comp + "\t" + title);
+				if(oldId != jobId){
+					oldId = jobId;
+					System.out.println(jobId + "\t" + comp + "\t" + title);
+				}
 			}
 		}
 		else{
@@ -256,11 +268,15 @@ public class proj3Functions{
 
 		Integer jobId = 0;
 		String title = "";
+		Integer oldId = -1;
 
 		for(Document job : jobListHours){
 			title = job.getString("Business Title");
 			jobId = job.getInteger("Job ID");
-			System.out.println(jobId + " : " + title);
+			if(oldId != jobId){
+				oldId = jobId;
+				System.out.println(jobId + " : " + title);
+			}
 		}
 	}
 
@@ -276,47 +292,47 @@ public class proj3Functions{
 
 		List<Document> jobList = jobs.find(findQuery).into(new ArrayList<Document>());
 		if(!jobList.isEmpty()){
-			for(Document job : jobList){
-				System.out.println("Job ID:\t" + job.getInteger("Job ID"));
-				System.out.println("Agency:\t" + job.getString("Agency"));
-				System.out.println("# of Positions:\t" + job.getInteger("# Of Positions"));
-				System.out.println("Business Title:\t" + job.getString("Business Title"));
-				System.out.println("Civil Service Title:\t" + job.getString("Civil Service Title"));
-				System.out.println("Title Code No:\t" + job.getInteger("Title Code No"));
-				System.out.println("Level:\t" + job.getInteger("Level"));
-				System.out.println("Job Category:\t" + job.getString("Job Category"));
-				System.out.println("Full-Time/Part-Time:\t" + job.getString("Full-Time/Part-Time indicator"));
-				System.out.println("Salary Frequency:\t" + job.getString("Salary Frequency"));
+			Document job = jobList.get(0);
+		
+			System.out.println("Job ID:\t" + job.getInteger("Job ID"));
+			System.out.println("Agency:\t" + job.getString("Agency"));
+			System.out.println("# of Positions:\t" + job.getInteger("# Of Positions"));
+			System.out.println("Business Title:\t" + job.getString("Business Title"));
+			System.out.println("Civil Service Title:\t" + job.getString("Civil Service Title"));
+			System.out.println("Title Code No:\t" + job.getInteger("Title Code No"));
+			System.out.println("Level:\t" + job.getInteger("Level"));
+			System.out.println("Job Category:\t" + job.getString("Job Category"));
+			System.out.println("Full-Time/Part-Time:\t" + job.getString("Full-Time/Part-Time indicator"));
+			System.out.println("Salary Frequency:\t" + job.getString("Salary Frequency"));
 				
-				Object r1 = job.get("Salary Range From");
-				Object r2 = job.get("Salary Range To");
-				Double range1;
-				Double range2;
+			Object r1 = job.get("Salary Range From");
+			Object r2 = job.get("Salary Range To");
+			Double range1;
+			Double range2;
 				
 				//System.out.println(r1.getClass().toString());
 				
-				if (r1.getClass().toString().contains("Integer")) {
-					range1 = new Double((Integer)r1);
-				} else {
-					range1 = (Double)r1;
-				}
-				
-				if (r2.getClass().toString().contains("Integer")) {
-					range2 = new Double((Integer)r2);
-				} else {
-					range2 = (Double)r2;
-				}
-				
-				System.out.println("Salary Range:\t" + range1 + "-" + range2);
-				System.out.println("Work Location:\t" + job.getString("Work Location"));
-				System.out.println("Division:\t" + job.getString("Division/Work Unit"));
-				System.out.println("Job Description:\t" + job.getString("Job Description"));
-				System.out.println("Minimum Qualifying Requirements:\t" + job.getString("Minimum Qual Requirements"));
-				System.out.println("Preferred Skill:\t" + job.getString("Preferred Skills"));
-				System.out.println("Additional Information:\t" + job.getString("Additional Information"));
-				System.out.println("Residency Requirement:\t" + job.getString("Residency Requirement"));
-				System.out.println("Posting Date:\t" + job.getString("Posting Date"));
+			if (r1.getClass().toString().contains("Integer")) {
+				range1 = new Double((Integer)r1);
+			} else {
+				range1 = (Double)r1;
 			}
+			
+			if (r2.getClass().toString().contains("Integer")) {
+				range2 = new Double((Integer)r2);
+			} else {
+				range2 = (Double)r2;
+			}
+				
+			System.out.println("Salary Range:\t" + range1 + "-" + range2);
+			System.out.println("Work Location:\t" + job.getString("Work Location"));
+			System.out.println("Division:\t" + job.getString("Division/Work Unit"));
+			System.out.println("Job Description:\t" + job.getString("Job Description"));
+			System.out.println("Minimum Qualifying Requirements:\t" + job.getString("Minimum Qual Requirements"));
+			System.out.println("Preferred Skill:\t" + job.getString("Preferred Skills"));
+			System.out.println("Additional Information:\t" + job.getString("Additional Information"));
+			System.out.println("Residency Requirement:\t" + job.getString("Residency Requirement"));
+			System.out.println("Posting Date:\t" + job.getString("Posting Date"));
 		}
 		else{
 			System.out.println("Search returned Empty\n");
