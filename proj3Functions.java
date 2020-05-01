@@ -299,13 +299,13 @@ public class proj3Functions{
 		}
 	}
 
-	public searchSalary(MongoCollection<Document> jobs, Integer min){
+	public void searchSalary(MongoCollection<Document> jobs, Integer min){
 		Document rangeQuery = new Document();
 		rangeQuery.append("$gt", min);
 		Document findQuery = new Document();
 		findQuery.append("Salary Range From", rangeQuery);
 
-		List<Document> salaryList = jobs.find(findQuery).into(new ArrayList<>());
+		List<Document> salaryList = jobs.find(findQuery).into(new ArrayList<Document>());
 
 		Integer jobId = 0;
 		Integer oldId = -1;
