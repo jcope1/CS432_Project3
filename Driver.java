@@ -2,9 +2,22 @@ package com.mongodb.quickstart;
 
 import java.util.Scanner;
 
+import com.mongodb.ConnectionString;
+import com.mongodb.client.MongoClients;
+import com.mongodb.client.MongoClient;
+import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.MongoClientSettings;
+
 class Driver{
 	public static void main (String args []) {
 		Scanner in = new Scanner(System.in);
+
+		ConnectionString connString = new ConnectionString("mongodb+srv://cs432:cs432@cluster0-bwsn2.mongodb.net/test?retryWrites=true&w=majority");
+		MongoClientSettings settings = MongoClientSettings.builder().applyConnectionString(connString).retryWrites(true).build();
+		MongoClient mongo = MongoClients.create(settings);
+		MongoDatabase database = mongo.getDatabase("test");
+		MongoCollection<Document> jobs = database.getCollection("Jobs");
 		
 		proj3Functions func = new proj3Functions();
 		copeFunctions cope = new copeFunctions();
@@ -34,16 +47,16 @@ class Driver{
 			else{
 				try {
 					if(option.equals("1")){
-						func.listCommonJobTitles();
+						func.listCommonJobTitles(jobs);
 					}
 					else if(option.equals("2")){
-						func.listTitles();
+						func.listTitles(jobs);
 					}
 					else if(option.equals("3")){
-						func.listCompanies();
+						func.listCompanies(jobs);
 					}
 					else if(option.equals("4")){
-						func.listJobCategories();
+						func.listJobCategories(jobs);
 					}
 					else if(option.equals("5")){
 						cope.printHighestSalaryRange();
@@ -88,7 +101,7 @@ class Driver{
 									String id = in.nextLine();
 									try {
 										int idNum = Integer.parseInt(id);
-										func.searchJobId(idNum);
+										func.searchJobId(jobs, idNum);
 									}
 									catch(Exception e) {
 										System.out.println(e.getMessage());
@@ -99,20 +112,20 @@ class Driver{
 									System.out.println("Please Enter the Job Title:");
 									System.out.println("\n>>>");
 									String title = in.nextLine();
-									func.searchTitle(title);
+									func.searchTitle(jobs, title);
 								}
 								else if(option.equals("3")){
 									System.out.println("Please Enter the Company Name");
 									System.out.println("\n>>>");
 									String name = in.nextLine();
 									
-									func.searchCompany(name);
+									func.searchCompany(jobs, name);
 								}
 								else if(option.equals("4")){
 									System.out.println("Please Enter the Job Category:");
 									System.out.println("\n>>>");
 									String category = in.nextLine();
-									func.searchJobCategory(category);
+									func.searchJobCategory(jobs, category);
 								}
 								else if(option.equals("5")){
 									//TODO
@@ -130,7 +143,7 @@ class Driver{
 									break;
 								}
 								else {
-									System.out.println("\n*** UNKNOWN ERROR***\n");
+									System.out.println("\n*** UNKNOWN ERROR ***\n");
 								}
 							}
 						}

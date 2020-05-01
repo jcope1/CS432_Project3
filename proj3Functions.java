@@ -24,13 +24,7 @@ public class proj3Functions{
 	}
 	
 	
-	public void listCommonJobTitles(){
-		ConnectionString connString = new ConnectionString("mongodb+srv://cs432:cs432@cluster0-bwsn2.mongodb.net/test?retryWrites=true&w=majority");
-		MongoClientSettings settings = MongoClientSettings.builder().applyConnectionString(connString).retryWrites(true).build();
-		MongoClient mongo = MongoClients.create(settings);
-		MongoDatabase database = mongo.getDatabase("test");
-		MongoCollection<Document> jobs = database.getCollection("Jobs");
-		
+	public void listCommonJobTitles(MongoCollection<Document> jobs){
 		HashMap<String, Integer> jobTitleCount = new HashMap<String, Integer>();
 		CountComparator compar = new CountComparator(jobTitleCount);
 		TreeMap<String, Integer> sorted_jobTitleCount = new TreeMap<String,Integer>(compar);
@@ -75,14 +69,10 @@ public class proj3Functions{
 		}
 	}
 	
-	public void listTitles(){
+	public void listTitles(MongoCollection<Document> jobs){
 		List<String> titles = new ArrayList<String>();
 		Integer count = 0;
-		ConnectionString connString = new ConnectionString("mongodb+srv://cs432:cs432@cluster0-bwsn2.mongodb.net/test?retryWrites=true&w=majority");
-		MongoClientSettings settings = MongoClientSettings.builder().applyConnectionString(connString).retryWrites(true).build();
-		MongoClient mongo = MongoClients.create(settings);
-		MongoDatabase database = mongo.getDatabase("test");
-		MongoCollection<Document> jobs = database.getCollection("Jobs");
+
 		List<Document> jobList = jobs.find().into(new ArrayList<Document>());
 		
 		for(Document job : jobList){
@@ -99,14 +89,7 @@ public class proj3Functions{
 		//System.out.println(count);
 	}
 	
-	public void searchTitle(String str){
-		
-		ConnectionString connString = new ConnectionString("mongodb+srv://cs432:cs432@cluster0-bwsn2.mongodb.net/test?retryWrites=true&w=majority");
-		MongoClientSettings settings = MongoClientSettings.builder().applyConnectionString(connString).retryWrites(true).build();
-		MongoClient mongo = MongoClients.create(settings);
-		MongoDatabase database = mongo.getDatabase("test");
-		MongoCollection<Document> jobs = database.getCollection("Jobs");
-		
+	public void searchTitle(MongoCollection<Document> jobs, String str){
 		Document regQuery = new Document();
 		regQuery.append("$regex", "^(?)" + Pattern.quote(str));
 		regQuery.append("$options", "i");
@@ -133,12 +116,7 @@ public class proj3Functions{
 		}
 	}
 	
-	public void listJobCategories(){
-		ConnectionString connString = new ConnectionString("mongodb+srv://cs432:cs432@cluster0-bwsn2.mongodb.net/test?retryWrites=true&w=majority");
-		MongoClientSettings settings = MongoClientSettings.builder().applyConnectionString(connString).retryWrites(true).build();
-		MongoClient mongo = MongoClients.create(settings);
-		MongoDatabase database = mongo.getDatabase("test");
-		MongoCollection<Document> jobs = database.getCollection("Jobs");
+	public void listJobCategories(MongoCollection<Document> jobs){
 		List<Document> jobList = jobs.find().into(new ArrayList<Document>());
 		
 		List<String> categories = new ArrayList<String>();
@@ -159,13 +137,7 @@ public class proj3Functions{
 		
 	}
 	
-	public void searchJobCategory(String str){
-		ConnectionString connString = new ConnectionString("mongodb+srv://cs432:cs432@cluster0-bwsn2.mongodb.net/test?retryWrites=true&w=majority");
-		MongoClientSettings settings = MongoClientSettings.builder().applyConnectionString(connString).retryWrites(true).build();
-		MongoClient mongo = MongoClients.create(settings);
-		MongoDatabase database = mongo.getDatabase("test");
-		MongoCollection<Document> jobs = database.getCollection("Jobs");
-		
+	public void searchJobCategory(MongoCollection<Document> jobs, String str){		
 		Document regQuery = new Document();
 		regQuery.append("$regex", "^(?)" + Pattern.quote(str));
 		regQuery.append("$options", "i");
@@ -193,13 +165,7 @@ public class proj3Functions{
 		}
 	}
 	
-	public void listCompanies(){
-		ConnectionString connString = new ConnectionString("mongodb+srv://cs432:cs432@cluster0-bwsn2.mongodb.net/test?retryWrites=true&w=majority");
-		MongoClientSettings settings = MongoClientSettings.builder().applyConnectionString(connString).retryWrites(true).build();
-		MongoClient mongo = MongoClients.create(settings);
-		MongoDatabase database = mongo.getDatabase("test");
-		MongoCollection<Document> jobs = database.getCollection("Jobs");
-		
+	public void listCompanies(MongoCollection<Document> jobs){		
 		List<Document> companyList = jobs.find().into(new ArrayList<Document>());
 		List<String> companies = new ArrayList<String>();
 		Integer count = 0;
@@ -218,13 +184,7 @@ public class proj3Functions{
 		System.out.println(count);
 	}
 	
-	public void searchCompany(String str){
-		ConnectionString connString = new ConnectionString("mongodb+srv://cs432:cs432@cluster0-bwsn2.mongodb.net/test?retryWrites=true&w=majority");
-		MongoClientSettings settings = MongoClientSettings.builder().applyConnectionString(connString).retryWrites(true).build();
-		MongoClient mongo = MongoClients.create(settings);
-		MongoDatabase database = mongo.getDatabase("test");
-		MongoCollection<Document> jobs = database.getCollection("Jobs");
-		
+	public void searchCompany(MongoCollection<Document> jobs, String str){		
 		Document regQuery = new Document();
 		regQuery.append("$regex", "^(?)" + Pattern.quote(str));
 		regQuery.append("$options", "i");
@@ -254,13 +214,7 @@ public class proj3Functions{
 		}
 	}
 	
-	public void searchHoursType(String str){
-		ConnectionString connString = new ConnectionString("mongodb+srv://cs432:cs432@cluster0-bwsn2.mongodb.net/test?retryWrites=true&w=majority");
-		MongoClientSettings settings = MongoClientSettings.builder().applyConnectionString(connString).retryWrites(true).build();
-		MongoClient mongo = MongoClients.create(settings);
-		MongoDatabase database = mongo.getDatabase("test");
-		MongoCollection<Document> jobs = database.getCollection("Jobs");
-		
+	public void searchHoursType(MongoCollection<Document> jobs, String str){		
 		Document findQuery = new Document();
 		findQuery.append("Full-Time/Part-Time indicator", str);
 
@@ -280,13 +234,7 @@ public class proj3Functions{
 		}
 	}
 
-	public void searchJobId(Integer id){
-		ConnectionString connString = new ConnectionString("mongodb+srv://cs432:cs432@cluster0-bwsn2.mongodb.net/test?retryWrites=true&w=majority");
-		MongoClientSettings settings = MongoClientSettings.builder().applyConnectionString(connString).retryWrites(true).build();
-		MongoClient mongo = MongoClients.create(settings);
-		MongoDatabase database = mongo.getDatabase("test");
-		MongoCollection<Document> jobs = database.getCollection("Jobs");
-		
+	public void searchJobId(MongoCollection<Document> jobs, Integer id){
 		Document findQuery = new Document();
 		findQuery.append("Job ID", id);
 
