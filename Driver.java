@@ -87,14 +87,13 @@ class Driver{
 							System.out.println("3) Company");
 							System.out.println("4) Job Category");
 							System.out.println("5) Salary");
-							System.out.println("7) Full-Time/Part-Time");
-							System.out.println("");
+							System.out.println("6) Full-Time/Part-Time");
 							System.out.println("0) Back");
 							System.out.print("\n>>> ");
 						
 							option = in.nextLine();
 							
-							if(check_input(option, 9) != 0) {
+							if(check_input(option, 6) != 0) {
 								System.out.println("Please enter a valid option from the menu.");
 							}
 							else {
@@ -131,20 +130,23 @@ class Driver{
 									func.searchJobCategory(jobs, category);
 								}
 								else if(option.equals("5")){
-									//TODO
+									System.out.println("Please Enter the Minimum Salary:");
+									System.out.println("\n>>>");
+									String value = in.nextLine();
+									try{
+										Integer minumum = Integer.parseInt(value);
+										func.searchSalary(jobs, minimum)
+									}
+									catch(Exeception e){
+										System.out.println("Please enter valid value.");
+									}
 								}
 								else if(option.equals("6")){
-									//TODO
-								}
-								else if(option.equals("7")){
 									System.out.println("Please Enter [F]ull-Time or [P]art-Time");
 									String time = in.nextLine();
 									if(time.toUpperCase().equals("F") || time.toUpperCase().equals("P")){
 										func.searchTime(jobs, time);
 									}
-								}
-								else if(option.equals("8")){
-									//TODO
 								}
 								else if(option.equals("0")){
 									break;
