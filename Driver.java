@@ -2,6 +2,8 @@ package com.mongodb.quickstart;
 
 import java.util.Scanner;
 
+import org.bson.Document;
+
 import com.mongodb.ConnectionString;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoClient;
@@ -11,6 +13,8 @@ import com.mongodb.MongoClientSettings;
 
 class Driver{
 	public static void main (String args []) {
+		java.util.logging.Logger.getLogger("org.mongodb.driver").setLevel(java.util.logging.Level.SEVERE);
+		
 		Scanner in = new Scanner(System.in);
 
 		ConnectionString connString = new ConnectionString("mongodb+srv://cs432:cs432@cluster0-bwsn2.mongodb.net/test?retryWrites=true&w=majority");
@@ -134,7 +138,7 @@ class Driver{
 									//TODO
 								}
 								else if(option.equals("7")){
-									System.out.println("Please Enter [F]ull-Time or [P]art-Time")
+									System.out.println("Please Enter [F]ull-Time or [P]art-Time");
 									String time = in.nextLine();
 									if(time.toUpperCase().equals("F") || time.toUpperCase().equals("P")){
 										func.searchTime(jobs, time);

@@ -282,11 +282,11 @@ public class proj3Functions{
 		}
 	}
 
-	public searchTime(MongoCollection<Document> jobs, String str){
+	public void searchTime(MongoCollection<Document> jobs, String str){
 		Document findQuery = new Document();
 		findQuery.append("Full-Time/Part-Time indicator", str);
 
-		List<Document> jobList = jobs.find(findQuery).into(new ArrayList<>());
+		List<Document> jobList = jobs.find(findQuery).into(new ArrayList<Document>());
 		String title = "";
 		Integer jobId = 0;
 		Integer oldId = -1;
