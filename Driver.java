@@ -59,16 +59,16 @@ class Driver{
 						func.listJobCategories(jobs);
 					}
 					else if(option.equals("5")){
-						cope.printHighestSalaryRange();
+						cope.printHighestSalaryRange(jobs);
 					}
 					else if(option.equals("6")){
-						cope.printExperienceAverages();
+						cope.printExperienceAverages(jobs);
 					}
 					else if(option.equals("7")){
-						cope.printLocationHeatmap();
+						cope.printLocationHeatmap(jobs);
 					}
 					else if(option.equals("8")){
-						cope.printJobTrends();
+						cope.printJobTrends(jobs);
 					}
 					else if(option.equals("0")){
 						exit_menu();
@@ -85,7 +85,7 @@ class Driver{
 							System.out.println("5) Salary");
 							System.out.println("6) Experience Level");
 							System.out.println("7) Full-Time/Part-Time");
-							System.out.println("8) Time Since Posted");
+							System.out.println("");
 							System.out.println("0) Back");
 							System.out.print("\n>>> ");
 						
@@ -134,7 +134,11 @@ class Driver{
 									//TODO
 								}
 								else if(option.equals("7")){
-									//TODO
+									System.out.println("Please Enter [F]ull-Time or [P]art-Time")
+									String time = in.nextLine();
+									if(time.toUpperCase().equals("F") || time.toUpperCase().equals("P")){
+										func.searchTime(jobs, time);
+									}
 								}
 								else if(option.equals("8")){
 									//TODO

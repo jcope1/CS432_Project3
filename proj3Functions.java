@@ -18,11 +18,6 @@ import java.util.TreeMap;
 import java.util.regex.Pattern;
 
 public class proj3Functions{
-
-	public proj3Functions(){
-		java.util.logging.Logger.getLogger("org.mongodb.driver").setLevel(java.util.logging.Level.SEVERE);
-	}
-	
 	
 	public void listCommonJobTitles(MongoCollection<Document> jobs){
 		HashMap<String, Integer> jobTitleCount = new HashMap<String, Integer>();
@@ -284,6 +279,23 @@ public class proj3Functions{
 		}
 		else{
 			System.out.println("Search returned Empty\n");
+		}
+	}
+
+	public searchTime(MongoCollection<Document> jobs, String str){
+		Document findQuery = new Document();
+		findQuery.append("Full-Time/Part-Time indicator", str);
+
+		List<Document> jobList = jobs.find(findQuery).into(new ArrayList<>());
+		String title = "";
+		Integer jobId = 0;
+		Integer oldId = -1;
+		for(Document job : jobList){
+			title = job.getString("Business Title");
+			jobId = job.getInteger("Job ID");
+			if(oldId != jobId){
+				System.out.println(jobId + "\t" + title);
+			}
 		}
 	}
 }
