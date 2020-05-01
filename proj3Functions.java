@@ -294,6 +294,7 @@ public class proj3Functions{
 			title = job.getString("Business Title");
 			jobId = job.getInteger("Job ID");
 			if(!oldId.equals(jobId)){
+				oldId = jobId;
 				System.out.println(jobId + "\t" + title);
 			}
 		}
